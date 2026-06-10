@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+lastfm:
+  build: .
+  volumes:
+    - ./data:/app/data:ro
+    - ./output:/app/output
