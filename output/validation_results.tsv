@@ -1,0 +1,3 @@
+Model,MAE,RMSE
+Prophet,1.94,2.51
+Naive Baseline,1.69,
