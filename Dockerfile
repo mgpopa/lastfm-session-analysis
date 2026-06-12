@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir --upgrade prophet==1.3.0 numpy==1.26.4 pandas==2.
 COPY *.py ./
 RUN mkdir -p /app/output
 
-CMD ["exercise2.py", "exercise3.py", "exercise3_validation.py"]
+CMD ["exercise3.py", "exercise3_validation.py"]
