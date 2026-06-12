@@ -63,5 +63,5 @@ Metric chosen: **number of sessions per day**.
 - Add feature engineering (day-of-wek effects, holidays etc.)
 - Explore session duration as an alternative forecast metric
 - More data quality checks upfront
-- Pull the shared logic out into a small `helpers.py` that both `exercise3.py` and `exercise3_validation.py` import.
+- Pull the shared logic out into a small `helpers.py` that both `exercise3.py` and `exercise3_validation.py` import
 - Better handling of ties in the top 10 ranking
