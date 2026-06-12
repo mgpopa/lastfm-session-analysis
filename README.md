@@ -1,4 +1,4 @@
-# LasTFM Session Analysis
+# LastFM Session Analysis
 
 ## How to run
 
