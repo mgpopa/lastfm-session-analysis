@@ -58,7 +58,7 @@ Metric chosen: **number of sessions per day**.
 
 - Try ARIMA as an alternative to Prophet
 
-    -Tuning Prophet didn't help, ARIMA might be better in production. Prophet is designed for data with trends and multiple seasonality layers, which the user doesn't have. That makes me believe that Prophet might be the wrong choice for this particular user/use case, but it was a reasonable first choice before I had evidence.
+    - Tuning Prophet didn't help, ARIMA might be better in production. Prophet is designed for data with trends and multiple seasonality layers, which the user doesn't have. That makes me believe that Prophet might be the wrong choice for this particular user/use case, but it was a reasonable first choice before I had evidence.
 
 - Add feature engineering (day-of-wek effects, holudays etc.)
 - Explore session duration as an alternative forecast metric
