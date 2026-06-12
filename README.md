@@ -30,6 +30,7 @@ Results will appear in `output/`:
 pip install -r requirements.txt
 python exercise2.py
 python exercise3.py
+python exercise3_validation.py #optional to cross validate the model
 ```
 
 ## Approach
@@ -55,7 +56,7 @@ Metric chosen: **number of sessions per day**.
 
 ## What I'd improve with more time
 
-- Compare Prophet vs ARIMA and do proper cross-validation
+- Try ARIMA as an alternative to Prophet
 - Add feature engineering (day-of-week effects, holudays etc.)
 - Explore session duration as an alternative forecast metric
 - More data quality checks upfront
