@@ -10,9 +10,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir --upgrade prophet==1.3.0 numpy==1.26.4 pandas==2.0.3
 
-COPY exercise2.py .
-COPY exercise3.py .
-COPY exercise3_validation.py .
+#COPY exercise2.py .
+#COPY exercise3.py .
+#COPY exercise3_validation.py .
+
+COPY *.py ./
 RUN mkdir -p /app/output
 
-CMD ["python", "exercise3_validation.py"]
+CMD ["exercise2.py", "exercise3.py", "exercise3_validation.py"]
