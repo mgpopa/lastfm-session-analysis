@@ -75,13 +75,12 @@ def main():
     spark.stop()
 
 
-    # train Prophet model | LE: initially yearly_seasonality was set to true and seasonality_mode="multiplicative"
+    # train Prophet model
     model = Prophet(
         weekly_seasonality=True,
-        yearly_seasonality=False,
+        yearly_seasonality=True,
         daily_seasonality=False,
-        seasonality_mode="additive",
-        changepoint_prior_scale=0.1
+        seasonality_mode="multiplicative"
     )
     model.fit(daily)
 
