@@ -81,7 +81,7 @@ def main():
         yearly_seasonality=False,
         daily_seasonality=False,
         seasonality_mode="additive",
-        change_point_prior_scale=0.1
+        changepoint_prior_scale=0.1
     )
     model.fit(daily)
 
