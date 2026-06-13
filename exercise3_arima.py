@@ -3,7 +3,7 @@
 
 import pandas as pd
 import matplotlib
-matplotlib.use('Agg')  # Use a non-interactive backend for plotting
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pmdarima as pm
 from pyspark.sql import SparkSession, Window
