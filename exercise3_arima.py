@@ -1,5 +1,4 @@
 # ARIMA comparison, tried auto_arima against the naive baseline
-# run after exercsie3.py Prophet results are in exercsie3_validation.py
 
 import pandas as pd
 import matplotlib
@@ -11,11 +10,13 @@ from pyspark.sql import functions as F
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType
 
 DATA_FILE = "data/lastfm-dataset-1K/userid-timestamp-artid-artname-traid-traname.tsv"
-OUTPUT_FILE = "output/arima_results.tsv"
+OUTPUT_FILE = "output/arima_forecast.tsv"
+OUTPUT_VALIDATION_FILE = "output/arima_validation.tsv"
 PLOT_FILE = "output/arima_plot.png"
 
 SESSION_GAP_SECONDS = 20 * 60  # 20 minutes
-HORIZON = 30  # forecast 30 days ahead
+HORIZON = 30
+FORECAST_DAYS = 90
 
 ####### reused from exercise3 (same data loading and sessionalization)
 
@@ -99,16 +100,28 @@ def main():
     mae = (abs(actual - pred)).mean()
     print(f"ARIMA MAE: {mae:.2f} sessions/day")
 
-    out= pd.DataFrame({"date": test["ds"].dt.strftime('%Y-%m-%d'), "actual": actual, "predicted": pred.round(1)})
-    out.to_csv(OUTPUT_FILE, index=False, sep="\t")
+    #save validation results
+    val_out = pd.DataFrame({"date": test["ds"].dt.strftime('%Y-%m-%d'), "actual": actual, "predicted": pred.round(1)})
+    val_out.to_csv(OUTPUT_VALIDATION_FILE, index=False, sep="\t")
+
+    # retrain on all data, forecast next 90 days
+    full_model = pm.auto_arima(daily["y"], seasonal=True, m=7, suppress_warnings=True, stepwise=True)
+    full_pred = full_model.predict(n_periods=FORECAST_DAYS).clip(lower=0) #no negative forecasts as sessions can't be negative
+
+    last_date = daily["ds"].max()
+    future_dates = pd.date_range(start=last_date + pd.Timedelta(days=1), periods=FORECAST_DAYS, freq="D")
+    fc_out= pd.DataFrame({"date": future_dates.strftime('%Y-%m-%d'), "predicted_sessions": full_pred.round(1)})
+    fc_out.to_csv(OUTPUT_FILE, index=False, sep="\t")
+    print(f"Forecast saved to {OUTPUT_FILE}")
 
     #plot
     fig, ax = plt.subplots(figsize=(12, 4))
-    ax.plot(test["ds"], actual, "k-", linewidth=2, label="Actual")
-    ax.plot(test["ds"], pred, "r--", linewidth=1.5, label=f"ARIMA (MAE={mae:.2f})")
+    ax.plot(daily["ds"], daily["y"], "k.",alpha=0.3, markersize=2, label="Historical")
+    ax.plot(future_dates, full_pred, "r-", linewidth=1.5, label=f"ARIMA Forecast")
+    ax.axvline(x=last_date, color="gray", linestyle="--", label="Forecast Start")
     ax.set_xlabel("Date")
     ax.set_ylabel("Sessions/day")
-    ax.set_title(f"ARIMA 30-days {top_user_id}")
+    ax.set_title(f"ARIMA 90-days forecast {top_user_id}")
     ax.legend()
     ax.grid(True, alpha=0.3)
     plt.tight_layout()

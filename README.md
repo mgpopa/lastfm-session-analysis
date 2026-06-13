@@ -31,6 +31,7 @@ pip install -r requirements.txt
 python exercise2.py
 python exercise3.py
 python exercise3_validation.py #optional to cross validate the model
+python exercise3_arima.py #optional to try ARIMA as alternative
 ```
 
 ## Approach
@@ -43,9 +44,16 @@ Then I count tracks per session -> take the top 50 -> count song plays across th
 
 ### Exercise 3 - Forecasting
 
-I picked the user with the most sessions, aggregated their daily session count, and used **Prophet** to forecast the next 3 months. Prophet handles weekly/yearly seasonality out of the box, which fits listening behaviour well.
-
 Metric chosen: **number of sessions per day**.
+
+I picked the user with the most sessions, aggregated their daily session count, and started with **Prophet** since it handles weekly/yearly seasonality out of the box (`exercise3.py`).
+
+Then I wanted to check if Prophet actually adds value, so I ran cross-validation against a naive baseline (predict= avg for that weekday). Turns out the baseline wins: MAE = 1.69 vs Prophet = 1.94. The user's behaviour is very regular by day-of-week and Prophet's extra complexity doesn't help (`exercise3_validation.py`).
+
+That made me to try **ARIMA** as a simpler alternative (auto_arima) with weekly seasonality (`exercise3_arima.py`). It focuses on short-term patterns (yesterday predicts today) rather than decomposing into trend + seasonality.
+
+ARIMA scored MAE = 1.33, best of the three. It captures both the weekly pattern and short-term momentum (yesterday predicts today). So the ARIMA script also produces the full 90 days forecast as an alternative to Prophet's.
+
 
 ## Assumptions
 
@@ -56,12 +64,16 @@ Metric chosen: **number of sessions per day**.
 
 ## What I'd improve with more time
 
-- Try ARIMA as an alternative to Prophet
-
-    - Tuning Prophet didn't help, ARIMA might be better in production. Prophet is designed for data with trends and multiple seasonality layers, which the user doesn't have. That makes me believe that Prophet might be the wrong choice for this particular user/use case, but it was a reasonable first choice before I had evidence.
-
+- Tune ARIMA further (e.g. try different seasonal periods)
 - Add feature engineering (day-of-wek effects, holidays etc.)
 - Explore session duration as an alternative forecast metric
 - More data quality checks upfront
 - Pull the shared logic out into a small `helpers.py` that both `exercise3.py` and `exercise3_validation.py` import
-- Better handling of ties in the top 10 ranking
+
+### Initial improvement ideas (now implemented)
+- ~~Compare Prophet vs ARIMA~~
+- ~~Try ARIMA as an alternative to Prophet~~
+
+    ~~- Tuning Prophet didn't help, ARIMA might be better in production. Prophet is designed for data with trends and multiple seasonality layers, which the user doesn't have. That makes me believe that Prophet might be the wrong choice for this particular user/use case, but it was a reasonable first choice before I had evidence.~~
+
+- ~~Do proper cross-validation~~
