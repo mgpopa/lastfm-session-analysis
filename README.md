@@ -20,9 +20,22 @@ docker-compose up --build
 ```
 
 Results will appear in `output/`:
-- `top_songs.tsv` - Exercise 2 answer
-- `forecast.tsv` - Exercise 3 answer
-- `forecast_plot.png` - Visualisation
+
+**Exercise 2 :**
+- `top_songs.tsv` (top 10 songs in tje top 50 longest sessions)
+
+**Exercise 3 - Prophet forecast:**
+- `forecast.tsv` (90 days forecast)
+- `forecast_plot.png` (historical data & Prophet forecast)
+
+**Exercise 3 - model validation:**
+- `validation_results.tsv` (Prophet vs naive baseline MAE comparison)
+- `valudation_plot.png` (cross-validation predictions vs actuals)
+
+**Exercise 3 - ARIMA alternative:**
+- `arima_forecast.tsv` (90 days forecast, ARIMA better MAE than Prophet)
+- `arima_validation.png` (ARIMA 30 days holdout: predicted vs actual)
+- `arima_plot.png` (historical data + ARIMA forecast)
 
 ### 3. Or run locally (needs Python 3.11)
 
